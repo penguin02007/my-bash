@@ -1,11 +1,28 @@
-### Install MariaDB on Centos 7 for Zabbix
+### Install Zabbix and MariaDB on Centos 7
 #### https://www.zabbix.com/documentation/2.4/manual/appendix/install/db_scripts
 
 
+#### Install PHP dependency
+```
+yum install php-bcmath php-bcstring
+```
+#### Install zabbix server for MySQL
+```
+wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
+yum localinstall -y epel-release-7-5.noarch.rpm
+yum install -y zabbix-server-mysql zabbix-web-mysql
+```
+#### Install agent to monitor itself and JMX
+```
+yum install -y zabbix-agent zabbix-java-gateway
+```
+
+#### Install MariaDB
+```
 yum install mariadb-server
 systemctl start mariadb
-chkconfig mariadb on
-
+systemctl enable mariadb
+```
 ip=xxx
 shell>
 ```
@@ -13,8 +30,8 @@ mysql -uroot -p
 ```
 mariadb>
 ```
-create database zabbix character set utf8 collate utf8_bin;
-GRANT ALL ON zabbix.* TO 'zabbix'@'$ip' IDENTIFIED BY 'zabbix';
+create database zabbixdb character set utf8 collate utf8_bin;
+GRANT ALL ON zabbixdb.* TO 'zabbix'@'$ip' IDENTIFIED BY 'zabbix';
 quit
 ```
 
